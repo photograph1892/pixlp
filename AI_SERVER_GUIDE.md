@@ -23,7 +23,9 @@ http://127.0.0.1:8787/api/pixel-person
 
 ## Deploy
 
-Deploy `server.py` and `requirements.txt` to Render as a Python Web Service.
+Deploy this repository to Render as a Python Web Service.
+
+Render can read `render.yaml` automatically. Use these settings if Render asks:
 
 Start command:
 
@@ -31,14 +33,16 @@ Start command:
 uvicorn server:app --host 0.0.0.0 --port $PORT
 ```
 
-After Render gives you a URL, replace this line in `app.js`:
+Recommended service name:
 
-```js
-const AI_PIXEL_PERSON_ENDPOINT = "http://127.0.0.1:8787/api/pixel-person";
+```text
+pixlp-ai
 ```
 
-with:
+If Render accepts that name, the AI endpoint will be:
 
-```js
-const AI_PIXEL_PERSON_ENDPOINT = "https://YOUR-RENDER-URL.onrender.com/api/pixel-person";
+```text
+https://pixlp-ai.onrender.com/api/pixel-person
 ```
+
+The frontend already uses this URL when it is opened from the deployed PixLP site.
