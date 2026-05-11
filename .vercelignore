@@ -1,0 +1,5 @@
+server.py
+requirements.txt
+AI_SERVER_GUIDE.md
+__pycache__/
+*.pyc
