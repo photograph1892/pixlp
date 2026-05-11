@@ -4,10 +4,10 @@ from fastapi import FastAPI, File, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import Response
 from PIL import Image, ImageFilter
-from rembg import remove
 
 
 app = FastAPI()
+rembg_session = None
 
 app.add_middleware(
     CORSMiddleware,
@@ -68,12 +68,22 @@ def pixelate_person(image: Image.Image) -> Image.Image:
     return canvas
 
 
+def remove_background(raw: bytes) -> bytes:
+    global rembg_session
+    from rembg import new_session, remove
+
+    if rembg_session is None:
+        # u2netp is the lighter person/object segmentation model, better for free CPU servers.
+        rembg_session = new_session("u2netp")
+    return remove(raw, session=rembg_session)
+
+
 @app.post("/api/pixel-person")
 async def pixel_person(image: UploadFile = File(...)):
     raw = await image.read()
 
     # AI step: detect the person and remove the background.
-    cutout_bytes = remove(raw)
+    cutout_bytes = remove_background(raw)
     cutout = Image.open(BytesIO(cutout_bytes)).convert("RGBA")
 
     # PixLP object step: convert the detected person into a pixel object.
@@ -87,3 +97,8 @@ async def pixel_person(image: UploadFile = File(...)):
 @app.get("/")
 def health_check():
     return {"status": "PixLP AI server is running"}
+
+
+@app.head("/")
+def health_check_head():
+    return Response(status_code=200)
