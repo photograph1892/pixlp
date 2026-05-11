@@ -657,6 +657,27 @@ input[type="text"]:focus {
   transform: translateX(-50%) translateY(0);
 }
 
+.empty-shelf {
+  min-height: 250px;
+  display: grid;
+  place-items: center;
+  align-content: center;
+  gap: 10px;
+  padding: 30px;
+  text-align: center;
+}
+
+.empty-shelf strong {
+  color: #fff7e8;
+  font-size: 22px;
+}
+
+.empty-shelf span {
+  max-width: 360px;
+  color: var(--muted);
+  line-height: 1.55;
+}
+
 .album-detail {
   position: sticky;
   top: 92px;

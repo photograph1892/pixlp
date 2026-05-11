@@ -12,47 +12,34 @@ const coverSub = document.querySelector("#coverSub");
 const styleButtons = document.querySelectorAll(".style-btn");
 const aiStatus = document.querySelector("#aiStatus");
 
+const STORAGE_KEY = "pixlp.albums.v1";
+
+function loadStoredAlbums() {
+  try {
+    const saved = localStorage.getItem(STORAGE_KEY);
+    if (!saved) return [];
+    const albums = JSON.parse(saved);
+    return Array.isArray(albums) ? albums : [];
+  } catch (error) {
+    return [];
+  }
+}
+
+function saveAlbums() {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(state.albums));
+  } catch (error) {
+    aiStatus.textContent = "기기 저장 공간이 부족해 앨범 저장에 실패했어요";
+  }
+}
+
 const state = {
   ootd: null,
   ootdCutout: null,
   place: null,
   style: "arcade",
   selectedId: null,
-  albums: [
-    {
-      id: "sample-1",
-      day: "월요일 산책",
-      ootd: "네이비 니트와 데님",
-      place: "성수",
-      song: "soft track",
-      color: "#8f1233",
-      date: "2026/05/03",
-      month: "2026.05",
-      image: ""
-    },
-    {
-      id: "sample-2",
-      day: "비 온 뒤",
-      ootd: "회색 후디와 검은 팬츠",
-      place: "연남",
-      song: "rain loop",
-      color: "#c23a22",
-      date: "2026/05/08",
-      month: "2026.05",
-      image: ""
-    },
-    {
-      id: "sample-3",
-      day: "새 신발",
-      ootd: "초록 가디건과 와이드 팬츠",
-      place: "한강",
-      song: "night ride",
-      color: "#ff8b28",
-      date: "2026/05/11",
-      month: "2026.05",
-      image: ""
-    }
-  ]
+  albums: loadStoredAlbums()
 };
 
 const AI_PIXEL_PERSON_ENDPOINT = "http://127.0.0.1:8787/api/pixel-person";
@@ -461,14 +448,15 @@ function addAlbum(event) {
   album.color = colorFromAlbum(album);
   state.albums.push(album);
   state.selectedId = album.id;
+  saveAlbums();
   aiStatus.textContent = "새 PixLP가 이번 달 책장에 꽂혔어요";
   drawShelf();
   renderDetail(album);
 }
 
 function monthRange() {
+  if (state.albums.length === 0) return [];
   const months = new Set(state.albums.map((album) => album.month));
-  ["2026.05", "2026.04", "2026.03"].forEach((month) => months.add(month));
   return [...months].sort((a, b) => b.localeCompare(a));
 }
 
@@ -503,6 +491,16 @@ function drawMonth(month, albums) {
 }
 
 function drawShelf() {
+  if (state.albums.length === 0) {
+    shelf.innerHTML = `
+      <div class="empty-shelf">
+        <strong>아직 꽂힌 PixLP가 없어요</strong>
+        <span>사진을 업로드하고 첫 앨범을 만들면 월별 책장에 순서대로 꽂혀요.</span>
+      </div>
+    `;
+    return;
+  }
+
   const grouped = monthRange().map((month) => ({
     month,
     albums: state.albums.filter((album) => album.month === month)
@@ -577,6 +575,7 @@ function updateAlbum(id, formData) {
   album.place = formData.get("place")?.trim() || "특별한 장소";
   album.song = formData.get("song")?.trim() || "무드 트랙";
   album.color = colorFromAlbum(album);
+  saveAlbums();
   aiStatus.textContent = "PixLP 정보가 수정됐어요";
   renderDetail(album);
 }
@@ -586,6 +585,7 @@ function deleteAlbum(id) {
   if (index === -1) return;
   state.albums.splice(index, 1);
   state.selectedId = null;
+  saveAlbums();
   aiStatus.textContent = "PixLP가 책장에서 삭제됐어요";
   drawShelf();
   renderEmptyDetail();
@@ -635,3 +635,6 @@ styleButtons.forEach((button) => {
 
 renderCover();
 drawShelf();
+if (state.albums.length > 0) {
+  renderDetail(state.albums[state.albums.length - 1]);
+}
