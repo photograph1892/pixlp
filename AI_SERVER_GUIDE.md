@@ -30,7 +30,7 @@ Render can read `render.yaml` automatically. Use these settings if Render asks:
 Start command:
 
 ```bash
-uvicorn server:app --host 0.0.0.0 --port $PORT
+python -m uvicorn server:app --host 0.0.0.0 --port ${PORT:-10000}
 ```
 
 Recommended service name:
