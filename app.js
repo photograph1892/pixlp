@@ -42,9 +42,7 @@ const state = {
   albums: loadStoredAlbums()
 };
 
-const AI_PIXEL_PERSON_ENDPOINT = window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1"
-  ? "http://127.0.0.1:8787/api/pixel-person"
-  : "https://pixlp-ai.onrender.com/api/pixel-person";
+const AI_PIXEL_PERSON_ENDPOINT = "https://pixlp-ai.onrender.com/api/pixel-person";
 
 const palettes = {
   arcade: {
