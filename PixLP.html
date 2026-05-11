@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PixLP</title>
+    <link rel="stylesheet" href="styles.css?v=20260511-3" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <nav class="topbar" aria-label="PixLP 메뉴">
+        <strong>PixLP</strong>
+        <div>
+          <a href="#create">Create</a>
+          <a href="#library">Library</a>
+          <a href="#device">Device</a>
+        </div>
+      </nav>
+
+      <section class="hero" id="device">
+        <div class="hero-copy">
+          <p class="eyebrow">AI pixel LP device</p>
+          <h1>PixLP</h1>
+          <p class="lead">
+            오늘의 OOTD와 장소 사진을 AI가 8비트 픽셀 커버로 바꾸고, 하루를 한 장의 LP처럼 보관합니다.
+          </p>
+          <div class="hero-actions">
+            <a class="primary-link" href="#create">오늘 앨범 만들기</a>
+            <span>웹사이트이자 나만의 픽셀 LP 디바이스</span>
+          </div>
+        </div>
+
+        <div class="device-stage" aria-label="PixLP 디바이스 미리보기">
+          <div class="device-body">
+            <div class="device-pill">
+              <span></span>
+              AI Pixel Engine
+            </div>
+            <div class="cover-frame">
+              <canvas id="coverCanvas" width="768" height="768"></canvas>
+              <div class="cover-label">
+                <span id="coverTitle">오늘의 PixLP</span>
+                <span id="coverSub">OOTD / Place / Mood</span>
+              </div>
+            </div>
+            <div class="device-footer">
+              <span id="aiStatus">사진을 올리면 AI 픽셀 변환이 시작돼요</span>
+              <i></i>
+            </div>
+          </div>
+          <div class="vinyl-disc" aria-hidden="true"><span></span></div>
+        </div>
+      </section>
+
+      <section class="workspace" id="create" aria-label="PixLP 앨범 만들기">
+        <aside class="panel upload-panel">
+          <div class="section-head">
+            <p class="eyebrow">Create</p>
+            <h2>AI 픽셀 커버 생성</h2>
+          </div>
+          <label class="dropzone" for="ootdInput">
+            <input id="ootdInput" type="file" accept="image/*" />
+            <span class="drop-icon">01</span>
+            <strong>OOTD 사진</strong>
+            <small>옷의 실루엣과 색감을 픽셀 아바타로 변환</small>
+          </label>
+          <label class="dropzone" for="placeInput">
+            <input id="placeInput" type="file" accept="image/*" />
+            <span class="drop-icon">02</span>
+            <strong>장소 사진</strong>
+            <small>장면을 8비트 게임 배경처럼 재구성</small>
+          </label>
+
+          <div class="control-group">
+            <span>픽셀 무드</span>
+            <div class="segmented" role="group" aria-label="픽셀 무드 선택">
+              <button class="style-btn active" type="button" data-style="arcade">Arcade</button>
+              <button class="style-btn" type="button" data-style="sunset">Sunset</button>
+              <button class="style-btn" type="button" data-style="midnight">Midnight</button>
+            </div>
+          </div>
+          <label class="switch-row">
+            <span>LP 디바이스 패키지</span>
+            <input id="lpToggle" type="checkbox" checked />
+            <i></i>
+          </label>
+        </aside>
+
+        <section class="panel form-panel">
+          <div class="section-head">
+            <p class="eyebrow">Track info</p>
+            <h2>오늘의 앨범 정보</h2>
+          </div>
+          <form id="albumForm">
+            <label>
+              <span>오늘 하루는 어땠나요?</span>
+              <input id="dayComment" type="text" maxlength="42" placeholder="살짝 흐렸지만 이상하게 좋은 하루" />
+            </label>
+            <label>
+              <span>오늘 OOTD는 뭔가요?</span>
+              <input id="ootdComment" type="text" maxlength="42" placeholder="블랙 재킷과 낡은 데님" />
+            </label>
+            <label>
+              <span>오늘 갔던 특별한 장소</span>
+              <input id="placeComment" type="text" maxlength="52" placeholder="한강 노을 산책길" />
+            </label>
+            <label>
+              <span>오늘 들었던 노래 <em>옵션</em></span>
+              <input id="songComment" type="text" maxlength="52" placeholder="wave to earth - seasons" />
+            </label>
+            <button class="primary-btn" type="submit">PixLP 꽂기</button>
+          </form>
+        </section>
+      </section>
+
+      <section class="library" id="library" aria-label="월별 PixLP 책장">
+        <div class="library-head">
+          <div class="section-head">
+            <p class="eyebrow">Monthly library</p>
+            <h2>LP 책장</h2>
+          </div>
+          <div class="library-sort">월별순</div>
+        </div>
+        <div class="library-layout">
+          <div class="shelf-board" id="albumShelf"></div>
+          <aside class="album-detail" id="albumDetail" aria-live="polite">
+            <p class="eyebrow">Selected LP</p>
+            <h3>LP를 클릭해 꺼내보기</h3>
+            <p>책장에 꽂힌 PixLP를 누르면 그날 적었던 정보가 여기에 나타나요.</p>
+          </aside>
+        </div>
+      </section>
+    </main>
+
+    <script src="app.js?v=20260511-3"></script>
+  </body>
+</html>
